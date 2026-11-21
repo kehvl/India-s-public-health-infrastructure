@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Dynamics of India 2023–24 | Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --blue: #0f6eaf;
+    --blue-light: #e6f2fb;
+    --blue-mid: #1d8ed5;
+    --teal: #0f7a6b;
+    --teal-light: #e1f5f0;
+    --coral: #c94a2a;
+    --coral-light: #faede8;
+    --amber: #c07b12;
+    --amber-light: #faeeda;
+    --green: #3a6d10;
+    --green-light: #eaf3de;
+    --purple: #5340b5;
+    --purple-light: #eeedfe;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f2f4;
+    --gray-200: #e2e4e8;
+    --gray-400: #9ba3b0;
+    --gray-600: #5a6170;
+    --gray-800: #2c3140;
+    --border: #e2e4e8;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+    --shadow: 0 4px 12px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+    --radius: 10px;
+    --radius-lg: 14px;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f0f4f8;
+    color: var(--gray-800);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* TOP NAV */
+  .topbar {
+    background: #0a2744;
+    color: #fff;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+  .topbar-brand .badge {
+    background: var(--blue-mid);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .topbar-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+    font-family: inherit;
+  }
+  .btn-ghost {
+    background: rgba(255,255,255,.12);
+    color: #fff;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,.2); }
+  .btn-primary {
+    background: var(--blue-mid);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #167bb8; }
+  .btn-success {
+    background: var(--teal);
+    color: #fff;
+  }
+  .btn-success:hover { background: #0d6b5d; }
+
+  /* SIDEBAR + MAIN LAYOUT */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+  }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  .sidebar-section {
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 4px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13.5px;
+    color: var(--gray-600);
+    transition: all .12s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+  }
+  .nav-item i { width: 18px; text-align: center; font-size: 14px; }
+  .nav-item:hover { background: var(--gray-100); color: var(--gray-800); }
+  .nav-item.active {
+    background: var(--blue-light);
+    color: var(--blue);
+    font-weight: 500;
+  }
+  .nav-item.active i { color: var(--blue); }
+
+  /* MAIN CONTENT */
+  .main {
+    flex: 1;
+    padding: 28px;
+    overflow-x: hidden;
+  }
+
+  /* PAGE SYSTEM */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header {
+    margin-bottom: 24px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gray-800);
+    letter-spacing: -0.3px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-top: 4px;
+  }
+  .breadcrumb {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .breadcrumb span { color: var(--gray-600); }
+
+  /* CARDS */
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+
+  /* METRIC CARDS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .metric-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--blue));
+  }
+  .metric-label {
+    font-size: 11.5px;
+    color: var(--gray-600);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .metric-label i { font-size: 12px; opacity: .7; }
+  .metric-value {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--gray-800);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .metric-sub {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 5px;
+  }
+  .metric-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-top: 6px;
+  }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  .gap-section { margin-bottom: 22px; }
+
+  /* CHART CONTAINERS */
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .data-table th {
+    background: var(--gray-50);
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11.5px;
+    color: var(--gray-600);
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-800);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--gray-50); }
+  .data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .data-table .bold { font-weight: 600; }
+  .data-table tr.highlight td { background: var(--blue-light); font-weight: 500; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .filter-bar select, .filter-bar input {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    background: #fff;
+    color: var(--gray-800);
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .filter-bar select:focus, .filter-bar input:focus {
+    outline: none;
+    border-color: var(--blue-mid);
+    box-shadow: 0 0 0 3px rgba(29,142,213,.12);
+  }
+  .filter-label {
+    font-size: 12px;
+    color: var(--gray-600);
+    font-weight: 500;
+  }
+
+  /* PILL TABS */
+  .pill-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--gray-100);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 18px;
+    width: fit-content;
+  }
+  .pill-tab {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--gray-600);
+    transition: all .15s;
+    font-family: inherit;
+  }
+  .pill-tab.active {
+    background: #fff;
+    color: var(--gray-800);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* PROGRESS BARS */
+  .prog-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .prog-label { font-size: 12.5px; color: var(--gray-600); width: 180px; flex-shrink: 0; }
+  .prog-bar-wrap { flex: 1; height: 8px; background: var(--gray-100); border-radius: 20px; overflow: hidden; }
+  .prog-bar { height: 100%; border-radius: 20px; background: var(--blue); transition: width .3s; }
+  .prog-val { font-size: 12.5px; font-weight: 600; color: var(--gray-800); min-width: 52px; text-align: right; }
+
+  /* INFO BOXES */
+  .info-box {
+    background: var(--blue-light);
+    border: 1px solid #c2dcf2;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #0a4070;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .info-box i { margin-top: 1px; flex-shrink: 0; }
+
+  /* STAT ROW IN STATE DETAIL */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .stat-box {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .stat-box-label { font-size: 11px; color: var(--gray-400); margin-bottom: 4px; }
+  .stat-box-val { font-size: 20px; font-weight: 600; color: var(--gray-800); }
+  .stat-box-sub { font-size: 10.5px; color: var(--gray-400); }
+  .stat-box.rural { border-top: 3px solid var(--blue); }
+  .stat-box.urban { border-top: 3px solid var(--teal); }
+  .stat-box.tribal { border-top: 3px solid var(--amber); }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--gray-600);
+    margin-bottom: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* PRINT STYLES */
+  @media print {
+    .topbar-actions, .sidebar { display: none !important; }
+    .layout { display: block; }
+    .main { padding: 0; }
+    .page { display: block !important; page-break-before: always; }
+    .page:first-child { page-break-before: auto; }
+    body { background: #fff; }
+    .card, .metric-card { box-shadow: none; border: 1px solid #ccc; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+  .tag-teal { background: var(--teal-light); color: var(--teal); }
+  .tag-coral { background: var(--coral-light); color: var(--coral); }
+  .tag-amber { background: var(--amber-light); color: var(--amber); }
+
+  .source-note {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  .two-col-data {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="topbar" aria-label="Main navigation">
+  <div class="topbar-brand">
+    <i class="fas fa-heartbeat" style="color:#4db8f0; font-size:18px;" aria-hidden="true"></i>
+    Health Dynamics of India
+    <span class="badge">2023–24</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost" onclick="window.print()" aria-label="Print dashboard">
+      <i class="fas fa-print" aria-hidden="true"></i> Print
+    </button>
+    <button class="btn btn-success" onclick="exportCSV()" aria-label="Export data as CSV">
+      <i class="fas fa-file-csv" aria-hidden="true"></i> Export CSV
+    </button>
+    <button class="btn btn-primary" onclick="exportJSON()" aria-label="Export data as JSON">
+      <i class="fas fa-download" aria-hidden="true"></i> Export JSON
+    </button>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" aria-label="Page navigation">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Overview</div>
+    <button class="nav-item active" onclick="showPage('overview', this)">
+      <i class="fas fa-th-large" aria-hidden="true"></i> National Overview
+    </button>
+    <button class="nav-item" onclick="showPage('infrastructure', this)">
+      <i class="fas fa-hospital" aria-hidden="true"></i> Infrastructure
+    </button>
+    <button class="nav-item" onclick="showPage('humanresources', this)">
+      <i class="fas fa-user-md" aria-hidden="true"></i> Human Resources
+    </button>
+  </div>
+  <div class="sidebar-section" style="margin-top:8px;">
+    <div class="sidebar-label">Analysis</div>
+    <button class="nav-item" onclick="showPage('statewise', this)">
+      <i class="fas fa-map-marker-alt" aria-hidden="true"></i> State Profiles
+    </button>
+    <button class="nav-item" onclick="showPage('comparison', this)">
+      <i class="fas fa-balance-scale" aria-hidden="true"></i> State Comparison
+    </button>
+    <button class="nav-item" onclick="showPage('ruralurban', this)">
+      <i class="fas fa-city" aria-hidden="true"></i> Rural vs Urban
+    </button>
+  </div>
+  <div class="sidebar-section" style="margin-top:8px;">
+    <div class="sidebar-label">Data</div>
+    <button class="nav-item" onclick="showPage('datatable', this)">
+      <i class="fas fa-table" aria-hidden="true"></i> Full Data Table
+    </button>
+    <button class="nav-item" onclick="showPage('about', this)">
+      <i class="fas fa-info-circle" aria-hidden="true"></i> About Report
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="main-content">
+
+<!-- ======================== PAGE: OVERVIEW ======================== -->
+<section class="page active" id="page-overview" aria-label="National Overview">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>National Overview</span></div>
+    <h1>India Health Infrastructure at a Glance</h1>
+    <p>As on 31 March 2024 · Source: Ministry of Health &amp; Family Welfare, Statistics Division</p>
+  </div>
+
+  <!-- KPI METRICS -->
+  <div class="metrics-grid">
+    <div class="metric-card" style="--accent:#1d8ed5;">
+      <div class="metric-label"><i class="fas fa-clinic-medical" aria-hidden="true"></i> Sub-Centres (SC)</div>
+      <div class="metric-value">1,71,994</div>
+      <div class="metric-sub">Rural: 1,67,230 · Urban: 4,764</div>
+      <span class="metric-badge tag-blue">Tribal: 26,892</span>
+    </div>
+    <div class="metric-card" style="--accent:#0f7a6b;">
+      <div class="metric-label"><i class="fas fa-first-aid" aria-hidden="true"></i> Primary Health Centres</div>
+      <div class="metric-value">32,085</div>
+      <div class="metric-sub">Rural: 25,785 · Urban: 6,300</div>
+      <span class="metric-badge tag-teal">Tribal: 4,094</span>
+    </div>
+    <div class="metric-card" style="--accent:#c94a2a;">
+      <div class="metric-label"><i class="fas fa-hospital-alt" aria-hidden="true"></i> Community Health Centres</div>
+      <div class="metric-value">6,427</div>
+      <div class="metric-sub">Rural: 5,639 · Urban: 788</div>
+      <span class="metric-badge tag-coral">Tribal: 1,001</span>
+    </div>
+    <div class="metric-card" style="--accent:#c07b12;">
+      <div class="metric-label"><i class="fas fa-hospital" aria-hidden="true"></i> District Hospitals</div>
+      <div class="metric-value">723</div>
+      <div class="metric-sub">Rural &amp; Urban coverage</div>
+    </div>
+    <div class="metric-card" style="--accent:#5340b5;">
+      <div class="metric-label"><i class="fas fa-procedures" aria-hidden="true"></i> Sub-District Hospitals</div>
+      <div class="metric-value">1,398</div>
+      <div class="metric-sub">SDH / Divisional Hospitals</div>
+    </div>
+    <div class="metric-card" style="--accent:#3a6d10;">
+      <div class="metric-label"><i class="fas fa-graduation-cap" aria-hidden="true"></i> Medical Colleges</div>
+      <div class="metric-value">337</div>
+      <div class="metric-sub">296 standalone + 41 attached to DH</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="grid-2 gap-section">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Facility Distribution</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#1d8ed5;"></span>SC (171994)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#0f7a6b;"></span>PHC (32085)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#c94a2a;"></span>CHC (6427)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#c07b12;"></span>SDH (1398)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#5340b5;"></span>DH (723)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#3a6d10;"></span>MC (337)</span>
+      </div>
+      <div class="chart-wrap" style="height:240px;">
+        <canvas id="facilityPieChart" role="img" aria-label="Pie chart showing health facility distribution in India">Sub-centres: 171994, PHC: 32085, CHC: 6427, SDH: 1398, DH: 723, MC: 337</canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Rural vs Urban Facilities</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#1d8ed5;"></span>Rural</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#0f7a6b;"></span>Urban</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#c07b12;"></span>Tribal</span>
+      </div>
+      <div class="chart-wrap" style="height:240px;">
+        <canvas id="ruralUrbanBar" role="img" aria-label="Bar chart comparing rural, urban and tribal health facilities">SC Rural:167230 Urban:4764 Tribal:26892, PHC Rural:25785 Urban:6300 Tribal:4094, CHC Rural:5639 Urban:788 Tribal:1001</canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- NORMS vs ACHIEVEMENT -->
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-bullseye" aria-hidden="true"></i> Population Coverage Norms vs Actual Status (Rural)</div>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Facility</th>
+            <th>Population Norm (General)</th>
+            <th>Population Norm (Tribal)</th>
+            <th>Actual Avg Population Covered</th>
+            <th>Avg Area (Sq.Km)</th>
+            <th>Avg Radial Distance (Km)</th>
+            <th>Avg Villages Covered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bold">Sub-Centre (SC)</td>
+            <td class="num">5,000</td>
+            <td class="num">3,000</td>
+            <td class="num bold" style="color:var(--blue)">5,412</td>
+            <td class="num">19.04</td>
+            <td class="num">2.46</td>
+            <td class="num">4</td>
+          </tr>
+          <tr>
+            <td class="bold">Primary Health Centre (PHC)</td>
+            <td class="num">30,000</td>
+            <td class="num">20,000</td>
+            <td class="num bold" style="color:var(--blue)">35,100</td>
+            <td class="num">102.04</td>
+            <td class="num">5.70</td>
+            <td class="num">26</td>
+          </tr>
+          <tr>
+            <td class="bold">Community Health Centre (CHC)</td>
+            <td class="num">1,20,000</td>
+            <td class="num">80,000</td>
+            <td class="num bold" style="color:var(--blue)">1,60,501</td>
+            <td class="num">509.43</td>
+            <td class="num">12.73</td>
+            <td class="num">118</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source-note">* Actual population per facility exceeds norms, indicating coverage gaps, especially in SC and CHC levels.</p>
+  </div>
+
+  <!-- HUMAN RESOURCES SUMMARY -->
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-users" aria-hidden="true"></i> Key Human Resources — National Total (Rural + Urban + Tribal)</div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:12px; font-weight:600; color:var(--gray-400); margin-bottom:10px; text-transform:uppercase; letter-spacing:.4px;">At Sub-Centres &amp; PHCs</p>
+        <div class="prog-row"><span class="prog-label">Health Worker (F)/ANM at SCs</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:100%; background:var(--blue);"></div></div><span class="prog-val">2,11,658</span></div>
+        <div class="prog-row"><span class="prog-label">Health Worker (M) at SCs</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:28%; background:var(--blue);"></div></div><span class="prog-val">60,776</span></div>
+        <div class="prog-row"><span class="prog-label">CHOs at SCs</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:55%; background:var(--teal);"></div></div><span class="prog-val">1,16,358</span></div>
+        <div class="prog-row"><span class="prog-label">Doctors/MOs at PHCs</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:87%; background:var(--coral);"></div></div><span class="prog-val">41,973</span></div>
+        <div class="prog-row"><span class="prog-label">AYUSH Doctors at PHCs</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:25%; background:var(--amber);"></div></div><span class="prog-val">10,772</span></div>
+        <div class="prog-row"><span class="prog-label">Pharmacists at PHCs</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:66%; background:var(--purple);"></div></div><span class="prog-val">27,993</span></div>
+      </div>
+      <div>
+        <p style="font-size:12px; font-weight:600; color:var(--gray-400); margin-bottom:10px; text-transform:uppercase; letter-spacing:.4px;">At CHCs</p>
+        <div class="prog-row"><span class="prog-label">AYUSH Specialists</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:73%; background:var(--amber);"></div></div><span class="prog-val">1,445</span></div>
+        <div class="prog-row"><span class="prog-label">Surgeons</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:85%; background:var(--blue);"></div></div><span class="prog-val">1,206</span></div>
+        <div class="prog-row"><span class="prog-label">Obstetricians &amp; Gynecologists</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:100%; background:var(--coral);"></div></div><span class="prog-val">2,133</span></div>
+        <div class="prog-row"><span class="prog-label">Physicians</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:90%; background:var(--teal);"></div></div><span class="prog-val">2,429</span></div>
+        <div class="prog-row"><span class="prog-label">Paediatricians</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:78%; background:var(--purple);"></div></div><span class="prog-val">1,765</span></div>
+        <div class="prog-row"><span class="prog-label">Nursing Staff</span><div class="prog-bar-wrap"><div class="prog-bar" style="width:100%; background:var(--green);"></div></div><span class="prog-val">51,543</span></div>
+      </div>
+    </div>
+    <p class="source-note">Rural + Urban + Tribal combined. Source: Health Dynamics of India 2023–24, MOHFW.</p>
+  </div>
+</section>
+
+<!-- ======================== PAGE: INFRASTRUCTURE ======================== -->
+<section class="page" id="page-infrastructure" aria-label="Infrastructure Details">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>Infrastructure</span></div>
+    <h1>Health Infrastructure Details</h1>
+    <p>Facility counts by type and area classification · As on 31 March 2024</p>
+  </div>
+
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-layer-group" aria-hidden="true"></i> Three-Tier Rural Health System</div>
+    <div class="grid-3">
+      <div class="stat-box rural">
+        <div class="stat-box-label">Sub-Centres (Rural)</div>
+        <div class="stat-box-val" style="color:var(--blue)">1,67,230</div>
+        <div class="stat-box-sub">First point of contact</div>
+      </div>
+      <div class="stat-box rural">
+        <div class="stat-box-label">PHCs (Rural)</div>
+        <div class="stat-box-val" style="color:var(--blue)">25,785</div>
+        <div class="stat-box-sub">Primary care level</div>
+      </div>
+      <div class="stat-box rural">
+        <div class="stat-box-label">CHCs (Rural)</div>
+        <div class="stat-box-val" style="color:var(--blue)">5,639</div>
+        <div class="stat-box-sub">Community level</div>
+      </div>
+      <div class="stat-box urban">
+        <div class="stat-box-label">SCs (Urban)</div>
+        <div class="stat-box-val" style="color:var(--teal)">4,764</div>
+        <div class="stat-box-sub">Urban sub-centres</div>
+      </div>
+      <div class="stat-box urban">
+        <div class="stat-box-label">PHCs (Urban)</div>
+        <div class="stat-box-val" style="color:var(--teal)">6,300</div>
+        <div class="stat-box-sub">Urban primary care</div>
+      </div>
+      <div class="stat-box urban">
+        <div class="stat-box-label">CHCs (Urban)</div>
+        <div class="stat-box-val" style="color:var(--teal)">788</div>
+        <div class="stat-box-sub">Urban community</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2 gap-section">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Facilities by Level (All India)</div>
+      <div class="chart-wrap" style="height:280px;">
+        <canvas id="infraBarChart" role="img" aria-label="Bar chart of all India health facilities by type">SC:171994, PHC:32085, CHC:6427, SDH:1398, DH:723, MC:337</canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-doughnut" aria-hidden="true"></i> Tribal Area Facilities</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#c07b12;"></span>SC Tribal (26892)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#1d8ed5;"></span>PHC Tribal (4094)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#0f7a6b;"></span>CHC Tribal (1001)</span>
+      </div>
+      <div class="chart-wrap" style="height:240px;">
+        <canvas id="tribalDonut" role="img" aria-label="Doughnut chart of tribal area health facilities">SC Tribal:26892, PHC Tribal:4094, CHC Tribal:1001</canvas>
+      </div>
+      <p class="source-note" style="margin-top:12px;">Tribal areas have special population norms (SC:3000, PHC:20000, CHC:80000) vs general norms.</p>
+    </div>
+  </div>
+
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-graduation-cap" aria-hidden="true"></i> Medical Colleges — Summary</div>
+    <div class="metrics-grid">
+      <div class="metric-card" style="--accent:#5340b5;">
+        <div class="metric-label">Total Medical Colleges</div>
+        <div class="metric-value">337</div>
+        <div class="metric-sub">Serving rural &amp; urban areas</div>
+      </div>
+      <div class="metric-card" style="--accent:#3a6d10;">
+        <div class="metric-label">Standalone MC+Hospital</div>
+        <div class="metric-value">296</div>
+        <div class="metric-sub">Independent institutions</div>
+      </div>
+      <div class="metric-card" style="--accent:#c07b12;">
+        <div class="metric-label">MC as District Hospital</div>
+        <div class="metric-value">41</div>
+        <div class="metric-sub">Dual function facilities</div>
+      </div>
+      <div class="metric-card" style="--accent:#c94a2a;">
+        <div class="metric-label">District Hospitals (DH)</div>
+        <div class="metric-value">723</div>
+        <div class="metric-sub">Secondary referral level</div>
+      </div>
+      <div class="metric-card" style="--accent:#1d8ed5;">
+        <div class="metric-label">Sub-District / Divisional</div>
+        <div class="metric-value">1,398</div>
+        <div class="metric-sub">SDH facilities</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <i class="fas fa-info-circle" aria-hidden="true"></i>
+    <div>
+      <strong>PM-ABHIM:</strong> Pradhan Mantri Ayushman Bharat Health Infrastructure Mission, launched 25 October 2021, aims to strengthen critical care infrastructure and primary health services across both rural and urban areas. States are upgrading SCs and PHCs as Ayushman Arogya Mandirs.
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PAGE: HUMAN RESOURCES ======================== -->
+<section class="page" id="page-humanresources" aria-label="Human Resources">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>Human Resources</span></div>
+    <h1>Human Resources at Health Facilities</h1>
+    <p>Staff deployment across facility types and area classifications · All India</p>
+  </div>
+
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Key Specialists at CHCs — Rural vs Urban</div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#1d8ed5;"></span>Rural</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#0f7a6b;"></span>Urban</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#c07b12;"></span>Tribal</span>
+    </div>
+    <div class="chart-wrap" style="height:320px;">
+      <canvas id="specialistChart" role="img" aria-label="Bar chart of specialist doctors at CHCs by rural, urban, tribal">Surgeons Rural:851 Urban:254 Tribal:101, OBGyn Rural:1346 Urban:600 Tribal:187, Physicians Rural:1862 Urban:340 Tribal:227, Paediatricians Rural:1164 Urban:451 Tribal:150</canvas>
+    </div>
+  </div>
+
+  <div class="grid-2 gap-section">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Staff at PHCs (Rural)</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#1d8ed5;"></span>Count</span>
+      </div>
+      <div class="chart-wrap" style="height:260px;">
+        <canvas id="phcStaffChart" role="img" aria-label="Bar chart of PHC rural staff categories">ANM:26403, Doctors:29949, AYUSH:8455, Pharmacists:19745, Lab Techs:15336, Nurses:35286</canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Support Staff at CHCs (Rural)</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#0f7a6b;"></span>Count</span>
+      </div>
+      <div class="chart-wrap" style="height:260px;">
+        <canvas id="chcSupportChart" role="img" aria-label="Bar chart of CHC rural support staff">Radiographers:2919, Pharmacists:8447, Lab Techs:9640, Nursing:36939, GDMOs-Ayush:7288, GDMOs-Allo:16483</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-table" aria-hidden="true"></i> All India HR Summary — All Areas Combined</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Staff Category</th>
+            <th class="num">Rural</th>
+            <th class="num">Urban</th>
+            <th class="num">Tribal</th>
+            <th class="num">Total*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight"><td class="bold" colspan="5">Sub-Centres</td></tr>
+          <tr><td>Health Worker (F)/ANM</td><td class="num">1,81,184</td><td class="num">—</td><td class="num">30,474</td><td class="num bold">2,11,658</td></tr>
+          <tr><td>Health Worker (M)</td><td class="num">48,901</td><td class="num">1,624</td><td class="num">11,141</td><td class="num bold">61,666</td></tr>
+          <tr><td>Community Health Officers (CHO)</td><td class="num">1,16,358</td><td class="num">—</td><td class="num">—</td><td class="num bold">1,16,358</td></tr>
+          <tr class="highlight"><td class="bold" colspan="5">Primary Health Centres</td></tr>
+          <tr><td>Health Worker (F)/ANM</td><td class="num">26,403</td><td class="num">23,221</td><td class="num">5,467</td><td class="num bold">55,091</td></tr>
+          <tr><td>Doctors/Medical Officers</td><td class="num">29,949</td><td class="num">7,297</td><td class="num">4,727</td><td class="num bold">41,973</td></tr>
+          <tr><td>AYUSH Doctors</td><td class="num">8,455</td><td class="num">838</td><td class="num">1,479</td><td class="num bold">10,772</td></tr>
+          <tr><td>Pharmacists</td><td class="num">19,745</td><td class="num">5,207</td><td class="num">3,041</td><td class="num bold">27,993</td></tr>
+          <tr><td>Laboratory Technicians</td><td class="num">15,336</td><td class="num">4,966</td><td class="num">2,866</td><td class="num bold">23,168</td></tr>
+          <tr><td>Staff Nurses</td><td class="num">35,286</td><td class="num">9,891</td><td class="num">6,931</td><td class="num bold">52,108</td></tr>
+          <tr class="highlight"><td class="bold" colspan="5">Community Health Centres</td></tr>
+          <tr><td>AYUSH Specialists</td><td class="num">1,025</td><td class="num">316</td><td class="num">104</td><td class="num bold">1,445</td></tr>
+          <tr><td>Surgeons</td><td class="num">851</td><td class="num">254</td><td class="num">101</td><td class="num bold">1,206</td></tr>
+          <tr><td>Obstetricians &amp; Gynaecologists</td><td class="num">1,346</td><td class="num">600</td><td class="num">187</td><td class="num bold">2,133</td></tr>
+          <tr><td>Physicians</td><td class="num">1,862</td><td class="num">340</td><td class="num">227</td><td class="num bold">2,429</td></tr>
+          <tr><td>Paediatricians</td><td class="num">1,164</td><td class="num">451</td><td class="num">150</td><td class="num bold">1,765</td></tr>
+          <tr><td>Anaesthetists</td><td class="num">719</td><td class="num">385</td><td class="num">82</td><td class="num bold">1,186</td></tr>
+          <tr><td>Nursing Staff</td><td class="num">36,939</td><td class="num">7,855</td><td class="num">6,749</td><td class="num bold">51,543</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source-note">* Total = Rural + Urban + Tribal. — indicates data not applicable or not available.</p>
+  </div>
+</section>
+
+<!-- ======================== PAGE: STATE PROFILES ======================== -->
+<section class="page" id="page-statewise" aria-label="State Profiles">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>State Profiles</span></div>
+    <h1>State / UT Health Profiles</h1>
+    <p>Select a state to view its health infrastructure and human resources</p>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label"><i class="fas fa-filter" aria-hidden="true"></i> Select State/UT:</span>
+    <select id="stateSelect" onchange="showStateProfile(this.value)" aria-label="Select state or UT">
+      <option value="">— Choose a State / UT —</option>
+      <option value="india">India (All India Total)</option>
+      <option value="andaman">Andaman &amp; Nicobar Islands</option>
+      <option value="assam">Assam</option>
+      <option value="chhattisgarh">Chhattisgarh</option>
+      <option value="haryana">Haryana</option>
+      <option value="jk">Jammu &amp; Kashmir</option>
+      <option value="jharkhand">Jharkhand</option>
+      <option value="madhyapradesh">Madhya Pradesh</option>
+      <option value="meghalaya">Meghalaya</option>
+      <option value="punjab">Punjab</option>
+      <option value="tamilnadu">Tamil Nadu</option>
+      <option value="uttarakhand">Uttarakhand</option>
+    </select>
+  </div>
+
+  <div id="stateProfileArea">
+    <div class="info-box">
+      <i class="fas fa-hand-pointer" aria-hidden="true"></i>
+      <div>Please select a state from the dropdown above to view its detailed health profile including infrastructure and human resource statistics.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PAGE: COMPARISON ======================== -->
+<section class="page" id="page-comparison" aria-label="State Comparison">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>State Comparison</span></div>
+    <h1>Multi-State Comparison</h1>
+    <p>Compare infrastructure across selected states side by side</p>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Metric:</span>
+    <select id="compMetric" onchange="updateComparison()" aria-label="Select metric for comparison">
+      <option value="sc">Sub-Centres (Total)</option>
+      <option value="phc">Primary Health Centres</option>
+      <option value="chc">Community Health Centres</option>
+      <option value="dh">District Hospitals</option>
+      <option value="mc">Medical Colleges</option>
+      <option value="doctors">Doctors at PHCs (Rural)</option>
+      <option value="nurses">Staff Nurses at PHCs (Rural)</option>
+      <option value="surgeons">Surgeons at CHCs (Rural)</option>
+    </select>
+    <span class="filter-label">Area:</span>
+    <select id="compArea" onchange="updateComparison()" aria-label="Select area type">
+      <option value="all">All Areas</option>
+      <option value="rural">Rural Only</option>
+      <option value="urban">Urban Only</option>
+      <option value="tribal">Tribal Only</option>
+    </select>
+  </div>
+
+  <div class="card gap-section">
+    <div class="card-title" id="compChartTitle"><i class="fas fa-chart-bar" aria-hidden="true"></i> Sub-Centres — State Comparison</div>
+    <div class="chart-wrap" style="height:380px;">
+      <canvas id="compChart" role="img" aria-label="Bar chart comparing states on selected metric">State comparison chart</canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="fas fa-table" aria-hidden="true"></i> Comparison Data Table</div>
+    <div class="table-wrap">
+      <table class="data-table" id="compTable">
+        <thead>
+          <tr>
+            <th>State / UT</th>
+            <th>Districts</th>
+            <th>Villages</th>
+            <th>SCs (Total)</th>
+            <th>PHCs (Total)</th>
+            <th>CHCs (Total)</th>
+            <th>DHs</th>
+            <th>Medical Colleges</th>
+          </tr>
+        </thead>
+        <tbody id="compTableBody"></tbody>
+      </table>
+    </div>
+    <p class="source-note">Total = Rural + Urban + Tribal combined where applicable.</p>
+  </div>
+</section>
+
+<!-- ======================== PAGE: RURAL VS URBAN ======================== -->
+<section class="page" id="page-ruralurban" aria-label="Rural vs Urban Analysis">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>Rural vs Urban</span></div>
+    <h1>Rural vs Urban vs Tribal Analysis</h1>
+    <p>Comparative analysis of health infrastructure and staffing across area types</p>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card" style="--accent:#1d8ed5;">
+      <div class="metric-label">Rural SCs</div>
+      <div class="metric-value">1,67,230</div>
+      <div class="metric-sub">97.2% of all SCs</div>
+    </div>
+    <div class="metric-card" style="--accent:#0f7a6b;">
+      <div class="metric-label">Urban SCs</div>
+      <div class="metric-value">4,764</div>
+      <div class="metric-sub">2.8% of all SCs</div>
+    </div>
+    <div class="metric-card" style="--accent:#c07b12;">
+      <div class="metric-label">Rural PHCs</div>
+      <div class="metric-value">25,785</div>
+      <div class="metric-sub">80.4% of all PHCs</div>
+    </div>
+    <div class="metric-card" style="--accent:#5340b5;">
+      <div class="metric-label">Urban PHCs</div>
+      <div class="metric-value">6,300</div>
+      <div class="metric-sub">19.6% of all PHCs</div>
+    </div>
+  </div>
+
+  <div class="grid-2 gap-section">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> Rural vs Urban Share — Each Facility Type</div>
+      <div class="chart-wrap" style="height:300px;">
+        <canvas id="ruralShareChart" role="img" aria-label="Stacked bar chart showing rural vs urban share of each facility type">SC Rural 97% Urban 3%, PHC Rural 80% Urban 20%, CHC Rural 88% Urban 12%</canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-radar" aria-hidden="true"></i> Key Staff — Rural vs Urban (PHC Level)</div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#1d8ed5;"></span>Rural</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#0f7a6b;"></span>Urban</span>
+      </div>
+      <div class="chart-wrap" style="height:280px;">
+        <canvas id="phcCompareChart" role="img" aria-label="Grouped bar chart of PHC staff rural vs urban">ANM Rural:26403 Urban:23221, Doctors Rural:29949 Urban:7297, AYUSH Rural:8455 Urban:838, Pharmacists Rural:19745 Urban:5207, Lab Techs Rural:15336 Urban:4966, Nurses Rural:35286 Urban:9891</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-chart-bar" aria-hidden="true"></i> CHC Specialists — Rural vs Urban vs Tribal</div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#1d8ed5;"></span>Rural</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#0f7a6b;"></span>Urban</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#c07b12;"></span>Tribal</span>
+    </div>
+    <div class="chart-wrap" style="height:280px;">
+      <canvas id="chcSpecialistRUT" role="img" aria-label="Grouped bar chart of CHC specialists across rural urban tribal">Surgeons R:851 U:254 T:101, ObGyn R:1346 U:600 T:187, Physicians R:1862 U:340 T:227, Paed R:1164 U:451 T:150, Anaes R:719 U:385 T:82</canvas>
+    </div>
+    <p class="source-note">Rural areas have significantly more specialists in absolute numbers; tribal areas face critical specialist shortages.</p>
+  </div>
+</section>
+
+<!-- ======================== PAGE: FULL DATA TABLE ======================== -->
+<section class="page" id="page-datatable" aria-label="Full Data Table">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>Data</span></div>
+    <h1>Complete State-wise Data</h1>
+    <p>All available state and UT data from Health Dynamics of India 2023–24</p>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label"><i class="fas fa-search" aria-hidden="true"></i></span>
+    <input type="text" id="tableSearch" placeholder="Search state..." oninput="filterTable()" aria-label="Search for a state" style="width:200px;">
+    <button class="btn btn-primary" onclick="exportCSV()" style="margin-left:auto;">
+      <i class="fas fa-file-csv" aria-hidden="true"></i> Download CSV
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table" id="fullDataTable">
+        <thead>
+          <tr>
+            <th>State / UT</th>
+            <th class="num">Districts</th>
+            <th class="num">Villages</th>
+            <th class="num">SCs<br><small>Rural</small></th>
+            <th class="num">SCs<br><small>Urban</small></th>
+            <th class="num">SCs<br><small>Tribal</small></th>
+            <th class="num">PHCs<br><small>Rural</small></th>
+            <th class="num">PHCs<br><small>Urban</small></th>
+            <th class="num">PHCs<br><small>Tribal</small></th>
+            <th class="num">CHCs<br><small>Rural</small></th>
+            <th class="num">CHCs<br><small>Urban</small></th>
+            <th class="num">CHCs<br><small>Tribal</small></th>
+            <th class="num">SDHs</th>
+            <th class="num">DHs</th>
+            <th class="num">Medical<br><small>Colleges</small></th>
+          </tr>
+        </thead>
+        <tbody id="fullDataTableBody"></tbody>
+      </table>
+    </div>
+    <p class="source-note">N App = Not Applicable · Data as on 31 March 2024 · Source: MOHFW Statistics Division</p>
+  </div>
+</section>
+
+<!-- ======================== PAGE: ABOUT ======================== -->
+<section class="page" id="page-about" aria-label="About the Report">
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fas fa-home" aria-hidden="true"></i> <span>About</span></div>
+    <h1>About This Report</h1>
+    <p>Health Dynamics of India: Infrastructure &amp; Human Resources 2023–24</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card gap-section">
+      <div class="card-title"><i class="fas fa-book-open" aria-hidden="true"></i> Publication Details</div>
+      <table class="data-table">
+        <tbody>
+          <tr><td style="font-weight:500; width:140px;">Title</td><td>Health Dynamics of India (Infrastructure &amp; Human Resources)</td></tr>
+          <tr><td style="font-weight:500;">Edition</td><td>2023–24</td></tr>
+          <tr><td style="font-weight:500;">Publisher</td><td>Ministry of Health &amp; Family Welfare (MOHFW), Govt. of India</td></tr>
+          <tr><td style="font-weight:500;">Division</td><td>Statistics Division</td></tr>
+          <tr><td style="font-weight:500;">Reference Date</td><td>31 March 2024</td></tr>
+          <tr><td style="font-weight:500;">Minister</td><td>Anupriya Patel, Minister of State — Health &amp; Family Welfare</td></tr>
+          <tr><td style="font-weight:500;">Date of Message</td><td>11 December 2025, New Delhi</td></tr>
+          <tr><td style="font-weight:500;">Coverage</td><td>All States &amp; Union Territories of India</td></tr>
+          <tr><td style="font-weight:500;">Total Pages</td><td>272 pages</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card gap-section">
+      <div class="card-title"><i class="fas fa-list" aria-hidden="true"></i> Key Abbreviations</div>
+      <table class="data-table">
+        <thead><tr><th>Code</th><th>Full Form</th></tr></thead>
+        <tbody>
+          <tr><td class="bold">SC</td><td>Sub-Centre</td></tr>
+          <tr><td class="bold">PHC</td><td>Primary Health Centre</td></tr>
+          <tr><td class="bold">CHC</td><td>Community Health Centre</td></tr>
+          <tr><td class="bold">SDH</td><td>Sub-District/Divisional Hospital</td></tr>
+          <tr><td class="bold">DH</td><td>District Hospital</td></tr>
+          <tr><td class="bold">MC</td><td>Medical College</td></tr>
+          <tr><td class="bold">ANM</td><td>Auxiliary Nurse Midwife</td></tr>
+          <tr><td class="bold">CHO</td><td>Community Health Officer</td></tr>
+          <tr><td class="bold">GDMO</td><td>General Duty Medical Officer</td></tr>
+          <tr><td class="bold">FRU</td><td>First Referral Unit</td></tr>
+          <tr><td class="bold">NHM</td><td>National Health Mission</td></tr>
+          <tr><td class="bold">NRHM</td><td>National Rural Health Mission</td></tr>
+          <tr><td class="bold">NUHM</td><td>National Urban Health Mission</td></tr>
+          <tr><td class="bold">RKS</td><td>Rogi Kalyan Samiti</td></tr>
+          <tr><td class="bold">UPHC</td><td>Urban Primary Health Centre</td></tr>
+          <tr><td class="bold">UCHC</td><td>Urban Community Health Centre</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card gap-section">
+    <div class="card-title"><i class="fas fa-info-circle" aria-hidden="true"></i> Scope of This Dashboard</div>
+    <p style="font-size:13.5px; line-height:1.8; color:var(--gray-600);">
+      This interactive dashboard visualises data from the <strong>Health Dynamics of India 2023–24</strong> report published by the Ministry of Health &amp; Family Welfare. It covers health infrastructure (Sub-Centres, PHCs, CHCs, SDHs, DHs, Medical Colleges) and human resources (doctors, nurses, specialists, paramedical staff) deployed at these facilities, broken down by state/UT and by rural, urban, and tribal classification. Data is as on <strong>31 March 2024</strong>.
+    </p>
+    <p style="font-size:13.5px; line-height:1.8; color:var(--gray-600); margin-top:10px;">
+      The report covers <strong>28 States</strong> and <strong>8 Union Territories</strong>, with 757 districts and 664,668 villages. The dashboard currently includes 11 representative states plus the All-India total. The full report (272 pages, 117+ detailed statistical tables) includes all states.
+    </p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+/* ===== DATA ===== */
+const stateData = {
+  india: { name: "India (All India)", districts: 757, villages: 664668,
+    sc: {r:167230, u:4764, t:26892}, phc:{r:25785,u:6300,t:4094}, chc:{r:5639,u:788,t:1001}, sdh:1398, dh:723, mc:337,
+    hr_sc_anm_r:181184, hr_sc_anm_t:30474, hr_sc_m_r:48901, hr_sc_cho_r:116358,
+    hr_phc_anm_r:26403, hr_phc_anm_u:23221, hr_phc_doc_r:29949, hr_phc_doc_u:7297,
+    hr_phc_ayush_r:8455, hr_phc_pharm_r:19745, hr_phc_lab_r:15336, hr_phc_nurse_r:35286,
+    hr_chc_surg_r:851, hr_chc_surg_u:254, hr_chc_surg_t:101,
+    hr_chc_obg_r:1346, hr_chc_obg_u:600, hr_chc_obg_t:187,
+    hr_chc_phys_r:1862, hr_chc_phys_u:340, hr_chc_phys_t:227,
+    hr_chc_paed_r:1164, hr_chc_paed_u:451, hr_chc_paed_t:150,
+    hr_chc_anaes_r:719, hr_chc_anaes_u:385, hr_chc_anaes_t:82,
+    hr_chc_nurse_r:36939, hr_chc_nurse_u:7855, hr_chc_nurse_t:6749 },
+  andaman: { name:"Andaman & Nicobar Islands", districts:3, villages:559,
+    sc:{r:126,u:0,t:41}, phc:{r:22,u:5,t:4}, chc:{r:4,u:0,t:1}, sdh:0, dh:2, mc:1,
+    hr_phc_doc_r:50, hr_chc_surg_r:1, hr_chc_obg_r:1, hr_chc_phys_r:1, hr_chc_paed_r:1, hr_chc_nurse_r:56 },
+  assam: { name:"Assam", districts:33, villages:27959,
+    sc:{r:4711,u:85,t:827}, phc:{r:927,u:92,t:191}, chc:{r:191,u:26,t:37}, sdh:16, dh:21, mc:13,
+    hr_phc_doc_r:1100, hr_phc_doc_u:117,
+    hr_chc_surg_r:7, hr_chc_surg_u:11, hr_chc_surg_t:2,
+    hr_chc_obg_r:60, hr_chc_obg_u:28, hr_chc_obg_t:6,
+    hr_chc_phys_r:110, hr_chc_phys_u:15, hr_chc_phys_t:18,
+    hr_chc_paed_r:41, hr_chc_paed_u:11, hr_chc_paed_t:6,
+    hr_chc_nurse_r:1282, hr_chc_nurse_u:283, hr_chc_nurse_t:262 },
+  chhattisgarh: { name:"Chhattisgarh", districts:33, villages:20363,
+    sc:{r:5056,u:457,t:2892}, phc:{r:770,u:60,t:412}, chc:{r:171,u:7,t:95}, sdh:15, dh:25, mc:8,
+    hr_phc_doc_r:477, hr_phc_doc_u:82,
+    hr_chc_surg_r:28, hr_chc_surg_u:2, hr_chc_surg_t:10,
+    hr_chc_obg_r:34, hr_chc_obg_u:4, hr_chc_obg_t:12,
+    hr_chc_phys_r:85, hr_chc_phys_u:1, hr_chc_phys_t:34,
+    hr_chc_paed_r:27, hr_chc_paed_u:7, hr_chc_paed_t:8,
+    hr_chc_nurse_r:1561, hr_chc_nurse_u:54, hr_chc_nurse_t:845 },
+  haryana: { name:"Haryana", districts:22, villages:7463,
+    sc:{r:2536,u:168,t:0}, phc:{r:392,u:116,t:0}, chc:{r:102,u:42,t:0}, sdh:33, dh:22, mc:4,
+    hr_phc_doc_r:505, hr_phc_doc_u:108,
+    hr_chc_surg_r:0, hr_chc_surg_u:1, hr_chc_surg_t:0,
+    hr_chc_obg_r:2, hr_chc_obg_u:9, hr_chc_obg_t:0,
+    hr_chc_phys_r:8, hr_chc_phys_u:1, hr_chc_phys_t:0,
+    hr_chc_paed_r:0, hr_chc_paed_u:8, hr_chc_paed_t:0,
+    hr_chc_nurse_r:1065, hr_chc_nurse_u:445, hr_chc_nurse_t:0 },
+  jk: { name:"Jammu & Kashmir", districts:20, villages:6857,
+    sc:{r:2424,u:71,t:436}, phc:{r:884,u:92,t:135}, chc:{r:46,u:36,t:11}, sdh:0, dh:13, mc:10,
+    hr_phc_doc_r:935, hr_phc_doc_u:159,
+    hr_chc_surg_r:25, hr_chc_surg_u:28, hr_chc_surg_t:2,
+    hr_chc_obg_r:30, hr_chc_obg_u:45, hr_chc_obg_t:5,
+    hr_chc_phys_r:23, hr_chc_phys_u:33, hr_chc_phys_t:4,
+    hr_chc_paed_r:22, hr_chc_paed_u:31, hr_chc_paed_t:5,
+    hr_chc_nurse_r:215, hr_chc_nurse_u:400, hr_chc_nurse_t:60 },
+  jharkhand: { name:"Jharkhand", districts:24, villages:32737,
+    sc:{r:3864,u:17,t:2470}, phc:{r:310,u:77,t:191}, chc:{r:190,u:7,t:112}, sdh:13, dh:21, mc:6,
+    hr_phc_doc_r:234, hr_phc_doc_u:63,
+    hr_chc_surg_r:36, hr_chc_surg_u:0, hr_chc_surg_t:19,
+    hr_chc_obg_r:30, hr_chc_obg_u:3, hr_chc_obg_t:21,
+    hr_chc_phys_r:93, hr_chc_phys_u:0, hr_chc_phys_t:52,
+    hr_chc_paed_r:28, hr_chc_paed_u:2, hr_chc_paed_t:15,
+    hr_chc_nurse_r:736, hr_chc_nurse_u:11, hr_chc_nurse_t:486 },
+  madhyapradesh: { name:"Madhya Pradesh", districts:52, villages:55895,
+    sc:{r:10256,u:0,t:3274}, phc:{r:1442,u:367,t:410}, chc:{r:327,u:21,t:107}, sdh:161, dh:52, mc:13,
+    hr_phc_doc_r:1547, hr_phc_doc_u:416,
+    hr_chc_surg_r:6, hr_chc_surg_u:1, hr_chc_surg_t:3,
+    hr_chc_obg_r:41, hr_chc_obg_u:11, hr_chc_obg_t:9,
+    hr_chc_phys_r:9, hr_chc_phys_u:1, hr_chc_phys_t:4,
+    hr_chc_paed_r:15, hr_chc_paed_u:2, hr_chc_paed_t:4,
+    hr_chc_nurse_r:2973, hr_chc_nurse_u:264, hr_chc_nurse_t:923 },
+  meghalaya: { name:"Meghalaya", districts:12, villages:7108,
+    sc:{r:464,u:16,t:480}, phc:{r:116,u:19,t:135}, chc:{r:27,u:1,t:28}, sdh:1, dh:14, mc:0,
+    hr_phc_doc_r:163, hr_phc_doc_u:16,
+    hr_chc_surg_r:1, hr_chc_surg_u:0, hr_chc_surg_t:1,
+    hr_chc_obg_r:2, hr_chc_obg_u:0, hr_chc_obg_t:2,
+    hr_chc_phys_r:2, hr_chc_phys_u:0, hr_chc_phys_t:2,
+    hr_chc_paed_r:1, hr_chc_paed_u:0, hr_chc_paed_t:1,
+    hr_chc_nurse_r:218, hr_chc_nurse_u:11, hr_chc_nurse_t:229 },
+  punjab: { name:"Punjab", districts:23, villages:12784,
+    sc:{r:2857,u:94,t:0}, phc:{r:397,u:125,t:0}, chc:{r:84,u:78,t:0}, sdh:41, dh:23, mc:4,
+    hr_phc_doc_r:408, hr_phc_doc_u:141,
+    hr_chc_surg_r:11, hr_chc_surg_u:27, hr_chc_surg_t:0,
+    hr_chc_obg_r:14, hr_chc_obg_u:32, hr_chc_obg_t:0,
+    hr_chc_phys_r:12, hr_chc_phys_u:28, hr_chc_phys_t:0,
+    hr_chc_paed_r:14, hr_chc_paed_u:27, hr_chc_paed_t:0,
+    hr_chc_nurse_r:582, hr_chc_nurse_u:512, hr_chc_nurse_t:0 },
+  tamilnadu: { name:"Tamil Nadu", districts:38, villages:18696,
+    sc:{r:8713,u:0,t:479}, phc:{r:1415,u:444,t:98}, chc:{r:388,u:39,t:18}, sdh:266, dh:37, mc:35,
+    hr_phc_doc_r:2311, hr_phc_doc_u:437,
+    hr_chc_surg_r:143, hr_chc_surg_u:3, hr_chc_surg_t:13,
+    hr_chc_obg_r:9, hr_chc_obg_u:21, hr_chc_obg_t:2,
+    hr_chc_phys_r:233, hr_chc_phys_u:27, hr_chc_phys_t:0,
+    hr_chc_paed_r:13, hr_chc_paed_u:12, hr_chc_paed_t:0,
+    hr_chc_nurse_r:2137, hr_chc_nurse_u:231, hr_chc_nurse_t:102 },
+  uttarakhand: { name:"Uttarakhand", districts:13, villages:17325,
+    sc:{r:1796,u:76,t:127}, phc:{r:544,u:69,t:15}, chc:{r:51,u:30,t:2}, sdh:21, dh:13, mc:3,
+    hr_phc_doc_r:538, hr_phc_doc_u:79,
+    hr_chc_surg_r:4, hr_chc_surg_u:8, hr_chc_surg_t:0,
+    hr_chc_obg_r:7, hr_chc_obg_u:4, hr_chc_obg_t:1,
+    hr_chc_phys_r:8, hr_chc_phys_u:3, hr_chc_phys_t:1,
+    hr_chc_paed_r:8, hr_chc_paed_u:6, hr_chc_paed_t:1,
+    hr_chc_nurse_r:258, hr_chc_nurse_u:146, hr_chc_nurse_t:6 }
+};
+
+const allStates = Object.values(stateData);
+const stateNames = allStates.map(s => s.name);
+
+/* ===== NAVIGATION ===== */
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'comparison') buildComparisonTable();
+  if (id === 'datatable') buildFullTable();
+}
+
+/* ===== CHART COLOURS ===== */
+const C = {
+  blue:'#1d8ed5', teal:'#0f7a6b', coral:'#c94a2a',
+  amber:'#c07b12', purple:'#5340b5', green:'#3a6d10',
+  blueA:'rgba(29,142,213,.7)', tealA:'rgba(15,122,107,.7)', coralA:'rgba(201,74,42,.7)',
+  amberA:'rgba(192,123,18,.7)', purpleA:'rgba(83,64,181,.7)', greenA:'rgba(58,109,16,.7)'
+};
+
+/* ===== CHART DEFAULTS ===== */
+Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#5a6170';
+
+function commonOpts(horizontal) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: horizontal ? {
+      x: { grid:{ color:'rgba(0,0,0,.04)' }, ticks:{ font:{size:11} } },
+      y: { grid:{ display:false }, ticks:{ font:{size:10} } }
+    } : {
+      x: { grid:{ display:false }, ticks:{ font:{size:10}, maxRotation:35 } },
+      y: { grid:{ color:'rgba(0,0,0,.04)' } }
+    }
+  };
+}
+
+/* ===== OVERVIEW CHARTS ===== */
+new Chart(document.getElementById('facilityPieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['SC (171,994)', 'PHC (32,085)', 'CHC (6,427)', 'SDH (1,398)', 'DH (723)', 'MC (337)'],
+    datasets: [{
+      data: [171994, 32085, 6427, 1398, 723, 337],
+      backgroundColor: [C.blue, C.teal, C.coral, C.amber, C.purple, C.green],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true, position: 'bottom',
+        labels: { boxWidth: 10, padding: 8, font: {size:11} }
+      },
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.parsed.toLocaleString('en-IN') } }
+    },
+    cutout: '60%'
+  }
+});
+
+new Chart(document.getElementById('ruralUrbanBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Sub-Centres', 'PHCs', 'CHCs'],
+    datasets: [
+      { label:'Rural', data:[167230,25785,5639], backgroundColor:C.blueA, borderColor:C.blue, borderWidth:1 },
+      { label:'Urban', data:[4764,6300,788], backgroundColor:C.tealA, borderColor:C.teal, borderWidth:1 },
+      { label:'Tribal', data:[26892,4094,1001], backgroundColor:C.amberA, borderColor:C.amber, borderWidth:1 }
+    ]
+  },
+  options: {
+    ...commonOpts(false),
+    plugins: { legend: { display: true, position:'top', labels:{boxWidth:10,padding:8,font:{size:11}} } },
+    scales: {
+      x: { grid:{display:false} },
+      y: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{ callback: v => v>=1000 ? (v/1000).toFixed(0)+'k' : v } }
+    }
+  }
+});
+
+/* ===== INFRASTRUCTURE CHARTS ===== */
+new Chart(document.getElementById('infraBarChart'), {
+  type: 'bar',
+  data: {
+    labels: ['SC','PHC','CHC','SDH','DH','MC'],
+    datasets: [{
+      label: 'Count',
+      data: [171994,32085,6427,1398,723,337],
+      backgroundColor: [C.blueA,C.tealA,C.coralA,C.amberA,C.purpleA,C.greenA],
+      borderColor: [C.blue,C.teal,C.coral,C.amber,C.purple,C.green],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    ...commonOpts(false),
+    scales: {
+      x: { grid:{display:false} },
+      y: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v} }
+    }
+  }
+});
+
+new Chart(document.getElementById('tribalDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: ['SC Tribal (26,892)','PHC Tribal (4,094)','CHC Tribal (1,001)'],
+    datasets: [{
+      data:[26892,4094,1001],
+      backgroundColor:[C.amberA,C.blueA,C.tealA],
+      borderColor:[C.amber,C.blue,C.teal], borderWidth:2, borderColor:'#fff'
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'55%',
+    plugins:{ legend:{display:true,position:'bottom',labels:{boxWidth:10,padding:8,font:{size:11}}},
+      tooltip:{callbacks:{label:ctx=>' '+ctx.label}} }
+  }
+});
+
+/* ===== HR CHARTS ===== */
+new Chart(document.getElementById('specialistChart'), {
+  type:'bar',
+  data:{
+    labels:['Surgeons','Obs & Gynae','Physicians','Paediatricians','Anaesthetists'],
+    datasets:[
+      {label:'Rural',data:[851,1346,1862,1164,719],backgroundColor:C.blueA,borderColor:C.blue,borderWidth:1},
+      {label:'Urban',data:[254,600,340,451,385],backgroundColor:C.tealA,borderColor:C.teal,borderWidth:1},
+      {label:'Tribal',data:[101,187,227,150,82],backgroundColor:C.amberA,borderColor:C.amber,borderWidth:1}
+    ]
+  },
+  options:{
+    ...commonOpts(false),
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:8,font:{size:11}}}}
+  }
+});
+
+new Chart(document.getElementById('phcStaffChart'), {
+  type:'bar',
+  data:{
+    labels:['ANM/HW(F)','Doctors','AYUSH','Pharmacists','Lab Techs','Staff Nurses'],
+    datasets:[{label:'Rural PHC Staff',data:[26403,29949,8455,19745,15336,35286],
+      backgroundColor:C.blueA,borderColor:C.blue,borderWidth:1}]
+  },
+  options:{...commonOpts(false),scales:{x:{grid:{display:false},ticks:{font:{size:9},maxRotation:30}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
+});
+
+new Chart(document.getElementById('chcSupportChart'), {
+  type:'bar',
+  data:{
+    labels:['Radiographers','Pharmacists','Lab Techs','Nursing','GDMOs-Ayush','GDMOs-Allo'],
+    datasets:[{label:'Rural CHC Staff',data:[2919,8447,9640,36939,7288,16483],
+      backgroundColor:C.tealA,borderColor:C.teal,borderWidth:1}]
+  },
+  options:{...commonOpts(false),scales:{x:{grid:{display:false},ticks:{font:{size:9},maxRotation:30}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
+});
+
+/* ===== RURAL vs URBAN CHARTS ===== */
+new Chart(document.getElementById('ruralShareChart'), {
+  type:'bar',
+  data:{
+    labels:['Sub-Centres','PHCs','CHCs'],
+    datasets:[
+      {label:'Rural',data:[97.2,80.4,87.7],backgroundColor:C.blueA,borderColor:C.blue,borderWidth:1},
+      {label:'Urban',data:[2.8,19.6,12.3],backgroundColor:C.tealA,borderColor:C.teal,borderWidth:1}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:8,font:{size:11}}}},
+    scales:{
+      x:{stacked:true,grid:{display:false}},
+      y:{stacked:true,max:100,grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>v+'%'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('phcCompareChart'), {
+  type:'bar',
+  data:{
+    labels:['ANM/HW(F)','Doctors','AYUSH','Pharmacists','Lab Techs','Nurses'],
+    datasets:[
+      {label:'Rural',data:[26403,29949,8455,19745,15336,35286],backgroundColor:C.blueA,borderColor:C.blue,borderWidth:1},
+      {label:'Urban',data:[23221,7297,838,5207,4966,9891],backgroundColor:C.tealA,borderColor:C.teal,borderWidth:1}
+    ]
+  },
+  options:{
+    ...commonOpts(false),
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:8,font:{size:11}}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:9},maxRotation:30}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}
+  }
+});
+
+new Chart(document.getElementById('chcSpecialistRUT'), {
+  type:'bar',
+  data:{
+    labels:['Surgeons','OB-GYN','Physicians','Paediatricians','Anaesthetists'],
+    datasets:[
+      {label:'Rural',data:[851,1346,1862,1164,719],backgroundColor:C.blueA,borderColor:C.blue,borderWidth:1},
+      {label:'Urban',data:[254,600,340,451,385],backgroundColor:C.tealA,borderColor:C.teal,borderWidth:1},
+      {label:'Tribal',data:[101,187,227,150,82],backgroundColor:C.amberA,borderColor:C.amber,borderWidth:1}
+    ]
+  },
+  options:{
+    ...commonOpts(false),
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:8,font:{size:11}}}}
+  }
+});
+
+/* ===== COMPARISON CHART ===== */
+let compChartInstance = null;
+function getMetricValues(key, area) {
+  return allStates.map(s => {
+    if (key==='sc') return area==='rural'?s.sc.r:area==='urban'?s.sc.u:area==='tribal'?s.sc.t:(s.sc.r+s.sc.u+s.sc.t);
+    if (key==='phc') return area==='rural'?s.phc.r:area==='urban'?s.phc.u:area==='tribal'?s.phc.t:(s.phc.r+s.phc.u+s.phc.t);
+    if (key==='chc') return area==='rural'?s.chc.r:area==='urban'?s.chc.u:area==='tribal'?s.chc.t:(s.chc.r+s.chc.u+s.chc.t);
+    if (key==='dh') return s.dh||0;
+    if (key==='mc') return s.mc||0;
+    if (key==='doctors') return s.hr_phc_doc_r||0;
+    if (key==='nurses') return s.hr_phc_nurse_r||0;
+    if (key==='surgeons') return s.hr_chc_surg_r||0;
+    return 0;
+  });
+}
+
+function getMetricLabel(key, area) {
+  const labels = {sc:'Sub-Centres',phc:'PHCs',chc:'CHCs',dh:'District Hospitals',mc:'Medical Colleges',doctors:'Doctors at PHCs (Rural)',nurses:'Staff Nurses at PHCs (Rural)',surgeons:'Surgeons at CHCs (Rural)'};
+  const areaL = {all:'All Areas',rural:'Rural',urban:'Urban',tribal:'Tribal'};
+  return `${labels[key]} — ${areaL[area]}`;
+}
+
+function updateComparison() {
+  const key = document.getElementById('compMetric').value;
+  const area = document.getElementById('compArea').value;
+  const vals = getMetricValues(key, area);
+  const label = getMetricLabel(key, area);
+  document.getElementById('compChartTitle').innerHTML = `<i class="fas fa-chart-bar"></i> ${label}`;
+
+  if (compChartInstance) compChartInstance.destroy();
+  const ctx = document.getElementById('compChart');
+  const wrapH = Math.max(380, allStates.length * 30 + 80);
+  ctx.parentElement.style.height = wrapH + 'px';
+
+  compChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: stateNames,
+      datasets: [{
+        label: label,
+        data: vals,
+        backgroundColor: C.blueA, borderColor: C.blue, borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false} },
+      scales: {
+        y: { grid:{display:false}, ticks:{font:{size:10}} },
+        x: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v} }
+      }
+    }
+  });
+}
+
+function buildComparisonTable() {
+  const tbody = document.getElementById('compTableBody');
+  tbody.innerHTML = '';
+  allStates.forEach(s => {
+    const tr = document.createElement('tr');
+    if (s.name.startsWith('India')) tr.classList.add('highlight');
+    tr.innerHTML = `
+      <td class="bold">${s.name}</td>
+      <td class="num">${s.districts}</td>
+      <td class="num">${s.villages.toLocaleString('en-IN')}</td>
+      <td class="num">${(s.sc.r+s.sc.u+s.sc.t).toLocaleString('en-IN')}</td>
+      <td class="num">${(s.phc.r+s.phc.u+s.phc.t).toLocaleString('en-IN')}</td>
+      <td class="num">${(s.chc.r+s.chc.u+s.chc.t).toLocaleString('en-IN')}</td>
+      <td class="num">${s.dh||0}</td>
+      <td class="num">${s.mc||0}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  updateComparison();
+}
+
+/* ===== FULL DATA TABLE ===== */
+function buildFullTable() {
+  const tbody = document.getElementById('fullDataTableBody');
+  tbody.innerHTML = '';
+  allStates.forEach(s => {
+    const tr = document.createElement('tr');
+    if (s.name.startsWith('India')) tr.classList.add('highlight');
+    const n = v => v===0?'0':(v||'—');
+    tr.innerHTML = `
+      <td class="bold">${s.name}</td>
+      <td class="num">${s.districts}</td>
+      <td class="num">${s.villages.toLocaleString('en-IN')}</td>
+      <td class="num">${n(s.sc.r).toLocaleString?.('en-IN')||n(s.sc.r)}</td>
+      <td class="num">${s.sc.u||0}</td>
+      <td class="num">${s.sc.t||0}</td>
+      <td class="num">${s.phc.r||0}</td>
+      <td class="num">${s.phc.u||0}</td>
+      <td class="num">${s.phc.t||0}</td>
+      <td class="num">${s.chc.r||0}</td>
+      <td class="num">${s.chc.u||0}</td>
+      <td class="num">${s.chc.t||0}</td>
+      <td class="num">${s.sdh||0}</td>
+      <td class="num">${s.dh||0}</td>
+      <td class="num">${s.mc||0}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterTable() {
+  const q = document.getElementById('tableSearch').value.toLowerCase();
+  document.querySelectorAll('#fullDataTableBody tr').forEach(tr => {
+    tr.style.display = tr.cells[0].textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+/* ===== STATE PROFILES ===== */
+function showStateProfile(key) {
+  const area = document.getElementById('stateProfileArea');
+  if (!key) { area.innerHTML = '<div class="info-box"><i class="fas fa-hand-pointer"></i><div>Please select a state from the dropdown above.</div></div>'; return; }
+  const s = stateData[key];
+  if (!s) return;
+  const n = v => (v!=null&&v!==undefined)?v.toLocaleString('en-IN'):'—';
+  area.innerHTML = `
+    <div class="card gap-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <h2 style="font-size:20px;font-weight:600;color:var(--gray-800);">${s.name}</h2>
+          <div style="font-size:13px;color:var(--gray-400);margin-top:3px;">
+            <span class="tag tag-blue"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> ${s.districts} Districts</span> &nbsp;
+            <span class="tag tag-teal"><i class="fas fa-home" aria-hidden="true"></i> ${s.villages.toLocaleString('en-IN')} Villages</span>
+          </div>
+        </div>
+      </div>
+      <hr class="section-divider">
+      <p style="font-size:12px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px;">Health Facilities</p>
+      <div class="stat-grid">
+        <div class="stat-box rural"><div class="stat-box-label">SCs (Rural)</div><div class="stat-box-val">${n(s.sc.r)}</div><div class="stat-box-sub">Urban: ${n(s.sc.u)} · Tribal: ${n(s.sc.t)}</div></div>
+        <div class="stat-box rural"><div class="stat-box-label">PHCs (Rural)</div><div class="stat-box-val">${n(s.phc.r)}</div><div class="stat-box-sub">Urban: ${n(s.phc.u)} · Tribal: ${n(s.phc.t)}</div></div>
+        <div class="stat-box rural"><div class="stat-box-label">CHCs (Rural)</div><div class="stat-box-val">${n(s.chc.r)}</div><div class="stat-box-sub">Urban: ${n(s.chc.u)} · Tribal: ${n(s.chc.t)}</div></div>
+      </div>
+      <div class="stat-grid" style="margin-top:12px;">
+        <div class="stat-box urban"><div class="stat-box-label">Sub-District Hospitals</div><div class="stat-box-val">${n(s.sdh)}</div></div>
+        <div class="stat-box urban"><div class="stat-box-label">District Hospitals</div><div class="stat-box-val">${n(s.dh)}</div></div>
+        <div class="stat-box urban"><div class="stat-box-label">Medical Colleges</div><div class="stat-box-val">${n(s.mc)}</div></div>
+      </div>
+      <hr class="section-divider">
+      <p style="font-size:12px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px;">Specialists at CHCs (Rural · Urban · Tribal)</p>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Specialist</th><th class="num">Rural</th><th class="num">Urban</th><th class="num">Tribal</th></tr></thead>
+          <tbody>
+            <tr><td>Surgeons</td><td class="num">${n(s.hr_chc_surg_r)}</td><td class="num">${n(s.hr_chc_surg_u)}</td><td class="num">${n(s.hr_chc_surg_t)}</td></tr>
+            <tr><td>Obstetricians &amp; Gynaecologists</td><td class="num">${n(s.hr_chc_obg_r)}</td><td class="num">${n(s.hr_chc_obg_u)}</td><td class="num">${n(s.hr_chc_obg_t)}</td></tr>
+            <tr><td>Physicians</td><td class="num">${n(s.hr_chc_phys_r)}</td><td class="num">${n(s.hr_chc_phys_u)}</td><td class="num">${n(s.hr_chc_phys_t)}</td></tr>
+            <tr><td>Paediatricians</td><td class="num">${n(s.hr_chc_paed_r)}</td><td class="num">${n(s.hr_chc_paed_u)}</td><td class="num">${n(s.hr_chc_paed_t)}</td></tr>
+            <tr><td>Nursing Staff</td><td class="num">${n(s.hr_chc_nurse_r)}</td><td class="num">${n(s.hr_chc_nurse_u)}</td><td class="num">${n(s.hr_chc_nurse_t)}</td></tr>
+            <tr><td>Doctors/MOs at PHCs (R/U)</td><td class="num">${n(s.hr_phc_doc_r)}</td><td class="num">${n(s.hr_phc_doc_u)}</td><td class="num">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+/* ===== EXPORT FUNCTIONS ===== */
+function exportCSV() {
+  const headers = ['State/UT','Districts','Villages','SC_Rural','SC_Urban','SC_Tribal','PHC_Rural','PHC_Urban','PHC_Tribal','CHC_Rural','CHC_Urban','CHC_Tribal','SDH','DH','Medical_Colleges','Doctors_PHC_Rural','Doctors_PHC_Urban','Surgeons_CHC_Rural','OBGyn_CHC_Rural','Physicians_CHC_Rural','Paed_CHC_Rural','Nurses_CHC_Rural'];
+  const rows = allStates.map(s => [
+    s.name, s.districts, s.villages,
+    s.sc.r, s.sc.u, s.sc.t,
+    s.phc.r, s.phc.u, s.phc.t,
+    s.chc.r, s.chc.u, s.chc.t,
+    s.sdh||0, s.dh||0, s.mc||0,
+    s.hr_phc_doc_r||0, s.hr_phc_doc_u||0,
+    s.hr_chc_surg_r||0, s.hr_chc_obg_r||0, s.hr_chc_phys_r||0, s.hr_chc_paed_r||0, s.hr_chc_nurse_r||0
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'health_dynamics_india_2023-24.csv';
+  a.click();
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(stateData, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'health_dynamics_india_2023-24.json';
+  a.click();
+}
+
+/* ===== INIT ===== */
+buildComparisonTable();
+buildFullTable();
+</script>
+</body>
+</html>
